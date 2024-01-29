@@ -1,7 +1,9 @@
 def print_board(board):
-    for row in board:
-        print(" | ".join(row))
-        print("-" * 5)
+    print("  1   2   3")  # Column numbers
+    for i, row in enumerate(board):
+        print(f"{i + 1} {' | '.join(row)}")  # Row number and row content
+        if i < 2:
+            print("  -" * 5)
 
 def check_win(board, player):
     # Check rows, columns and diagonals for a win
@@ -19,6 +21,7 @@ def get_move(board, player):
     while True:
         try:
             row, col = map(int, input(f"Player {player}, enter your move (row col): ").split())
+            row, col = row - 1, col - 1  # Adjusting for 0-based indexing
             if 0 <= row < 3 and 0 <= col < 3 and board[row][col] == ' ':
                 return row, col
             else:
@@ -26,9 +29,18 @@ def get_move(board, player):
         except ValueError:
             print("Invalid input. Please enter numbers only.")
 
+def choose_symbols():
+    while True:
+        symbol = input("Choose your symbol (X/O): ").upper()
+        if symbol in ['X', 'O']:
+            return symbol, 'O' if symbol == 'X' else 'X'
+        else:
+            print("Invalid symbol. Please choose X or O.")
+
 def main():
     board = [[' ' for _ in range(3)] for _ in range(3)]
-    current_player = 'X'
+    player1, player2 = choose_symbols()
+    current_player = player1
     
     while True:
         print_board(board)
@@ -44,7 +56,7 @@ def main():
             print("It's a tie!")
             break
 
-        current_player = 'O' if current_player == 'X' else 'X'
+        current_player = player2 if current_player == player1 else player1
 
 if __name__ == "__main__":
     main()
